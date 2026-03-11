@@ -295,7 +295,10 @@
     <div class="unlocked-view" id="unlockedView">
       <div class="lock-status">
         <span>🔓 <span data-i18n="unlocked">Unlocked</span></span>
-        <button class="lock-btn" id="lockBtn" data-i18n="lockBtn">Lock</button>
+        <div style="display: flex; gap: 6px;">
+          <button class="lock-btn" id="syncNowBtn" data-i18n="syncNow" title="Sync Now">Sync</button>
+          <button class="lock-btn" id="lockBtn" data-i18n="lockBtn">Lock</button>
+        </div>
       </div>
       <div class="bookmark-list" id="bookmarkList">
         <div class="empty-state" id="emptyState">

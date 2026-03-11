@@ -74,6 +74,225 @@ function applyTranslations(lang) {
   });
 }
 
+let syncIntervalId = null;
+
+async function syncWithWebdav(settings, bookmarks) {
+  const { webdavUrl, webdavUsername, webdavPassword, webdavPath, encryptionKey } = settings;
+  const url = webdavUrl.replace(/\/$/, '') + webdavPath;
+  const auth = 'Basic ' + btoa(webdavUsername + ':' + webdavPassword);
+  
+  const data = JSON.stringify(bookmarks);
+  const content = encryptionKey ? JSON.stringify(await encrypt(data, encryptionKey)) : data;
+  
+  const response = await fetch(url, {
+    method: 'PUT',
+    headers: {
+      'Authorization': auth,
+      'Content-Type': 'application/json'
+    },
+    body: content
+  });
+  
+  if (!response.ok && response.status !== 201 && response.status !== 204) {
+    throw new Error(`WebDAV upload failed: ${response.status}`);
+  }
+  
+  return true;
+}
+
+async function downloadFromWebdav(settings) {
+  const { webdavUrl, webdavUsername, webdavPassword, webdavPath, encryptionKey } = settings;
+  const url = webdavUrl.replace(/\/$/, '') + webdavPath;
+  const auth = 'Basic ' + btoa(webdavUsername + ':' + webdavPassword);
+  
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: { 'Authorization': auth }
+  });
+  
+  if (response.status === 404) return null;
+  if (!response.ok) throw new Error(`WebDAV download failed: ${response.status}`);
+  
+  const content = await response.text();
+  if (encryptionKey) {
+    const decrypted = await decrypt(JSON.parse(content), encryptionKey);
+    return JSON.parse(decrypted);
+  }
+  return JSON.parse(content);
+}
+
+async function syncWithS3(settings, bookmarks) {
+  const { s3Endpoint, s3Region, s3AccessKey, s3SecretKey, s3Bucket, s3Key, encryptionKey } = settings;
+  
+  const data = JSON.stringify(bookmarks);
+  const content = encryptionKey ? JSON.stringify(await encrypt(data, encryptionKey)) : data;
+  const body = new TextEncoder().encode(content);
+  
+  const date = new Date().toISOString().replace(/[:-]|\.\d{3}/g, '');
+  const amzDate = date.slice(0, 8);
+  const authorization = `AWS4-HMAC-SHA256\n${amzDate}T000000Z\n${amzDate}/${s3Region}/s3/aws4_request\n${await sha256(body)}`;
+  
+  const response = await fetch(`${s3Endpoint}/${s3Bucket}/${s3Key}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-amz-date': amzDate + 'T000000Z',
+      'x-amz-content-sha256': 'UNSIGNED-PAYLOAD'
+    },
+    body
+  });
+  
+  if (!response.ok && response.status !== 201) {
+    throw new Error(`S3 upload failed: ${response.status}`);
+  }
+  
+  return true;
+}
+
+async function downloadFromS3(settings) {
+  const { s3Endpoint, s3Region, s3Bucket, s3Key, encryptionKey } = settings;
+  
+  const response = await fetch(`${s3Endpoint}/${s3Bucket}/${s3Key}`);
+  
+  if (response.status === 404) return null;
+  if (!response.ok) throw new Error(`S3 download failed: ${response.status}`);
+  
+  const content = await response.text();
+  if (encryptionKey) {
+    const decrypted = await decrypt(JSON.parse(content), encryptionKey);
+    return JSON.parse(decrypted);
+  }
+  return JSON.parse(content);
+}
+
+async function syncWithCustomApi(settings, bookmarks) {
+  const { customApiUrl, customAuthHeader, encryptionKey } = settings;
+  
+  const data = JSON.stringify(bookmarks);
+  const content = encryptionKey ? JSON.stringify(await encrypt(data, encryptionKey)) : data;
+  
+  const headers = { 'Content-Type': 'application/json' };
+  if (customAuthHeader) headers['Authorization'] = customAuthHeader;
+  
+  const response = await fetch(customApiUrl, {
+    method: 'POST',
+    headers,
+    body: content
+  });
+  
+  if (!response.ok) throw new Error(`Custom API upload failed: ${response.status}`);
+  
+  return true;
+}
+
+async function downloadFromCustomApi(settings) {
+  const { customApiUrl, customAuthHeader, encryptionKey } = settings;
+  
+  const headers = {};
+  if (customAuthHeader) headers['Authorization'] = customAuthHeader;
+  
+  const response = await fetch(customApiUrl, { method: 'GET', headers });
+  
+  if (response.status === 404) return null;
+  if (!response.ok) throw new Error(`Custom API download failed: ${response.status}`);
+  
+  const content = await response.text();
+  if (encryptionKey) {
+    const decrypted = await decrypt(JSON.parse(content), encryptionKey);
+    return JSON.parse(decrypted);
+  }
+  return JSON.parse(content);
+}
+
+async function performSync() {
+  const settingsResult = await chrome.storage.local.get(['syncSettings']);
+  const settings = settingsResult.syncSettings || {};
+  
+  if (!settings.syncEnabled || settings.syncMethod === 'none') {
+    return { success: false, message: 'Sync not enabled' };
+  }
+  
+  const localResult = await chrome.storage.local.get(['privateBookmarks', 'customFolders', 'lastSyncTime']);
+  const localBookmarks = localResult.privateBookmarks || [];
+  const localFolders = localResult.customFolders || [];
+  const localData = { bookmarks: localBookmarks, customFolders: localFolders, lastModified: Date.now() };
+  
+  let remoteData = null;
+  let uploaded = false;
+  let downloaded = false;
+  
+  try {
+    switch (settings.syncMethod) {
+      case 'webdav':
+        remoteData = await downloadFromWebdav(settings);
+        if (remoteData) {
+          await chrome.storage.local.set({
+            privateBookmarks: remoteData.bookmarks || [],
+            customFolders: remoteData.customFolders || []
+          });
+          downloaded = true;
+        }
+        await syncWithWebdav(settings, localData);
+        uploaded = true;
+        break;
+        
+      case 's3':
+        remoteData = await downloadFromS3(settings);
+        if (remoteData) {
+          await chrome.storage.local.set({
+            privateBookmarks: remoteData.bookmarks || [],
+            customFolders: remoteData.customFolders || []
+          });
+          downloaded = true;
+        }
+        await syncWithS3(settings, localData);
+        uploaded = true;
+        break;
+        
+      case 'custom':
+        remoteData = await downloadFromCustomApi(settings);
+        if (remoteData) {
+          await chrome.storage.local.set({
+            privateBookmarks: remoteData.bookmarks || [],
+            customFolders: remoteData.customFolders || []
+          });
+          downloaded = true;
+        }
+        await syncWithCustomApi(settings, localData);
+        uploaded = true;
+        break;
+        
+      default:
+        return { success: false, message: 'Unknown sync method' };
+    }
+    
+    const now = Date.now();
+    await chrome.storage.local.set({ lastSyncTime: now });
+    
+    return { success: true, message: `Synced (uploaded: ${uploaded}, downloaded: ${downloaded})` };
+  } catch (error) {
+    return { success: false, message: error.message };
+  }
+}
+
+function startAutoSync(intervalMinutes) {
+  stopAutoSync();
+  if (intervalMinutes > 0) {
+    syncIntervalId = setInterval(() => {
+      performSync().then(result => {
+        console.log('Auto sync result:', result);
+      });
+    }, intervalMinutes * 60 * 1000);
+  }
+}
+
+function stopAutoSync() {
+  if (syncIntervalId) {
+    clearInterval(syncIntervalId);
+    syncIntervalId = null;
+  }
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
   const lang = detectLanguage();
   await loadTranslations(lang);
@@ -87,6 +306,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const errorMsg = document.getElementById('errorMsg');
   const statusText = document.getElementById('statusText');
   const lockBtn = document.getElementById('lockBtn');
+  const syncNowBtn = document.getElementById('syncNowBtn');
   const bookmarkList = document.getElementById('bookmarkList');
   const emptyState = document.getElementById('emptyState');
   const newTitle = document.getElementById('newTitle');
@@ -277,6 +497,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     await chrome.storage.local.set({ llmSettings: settings, syncSettings: settings, language: settings.language });
     
+    if (settings.syncEnabled && settings.autoSync) {
+      startAutoSync(settings.syncInterval);
+    } else {
+      stopAutoSync();
+    }
+    
     if (settings.language !== lang) {
       showToast(chrome.i18n.getMessage('settingsSaved'), 'success');
       settingsModal.classList.remove('active');
@@ -435,10 +661,31 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   async function deleteBookmark(id) {
+    const collapsedFolders = [];
+    document.querySelectorAll('.folder-content.collapsed').forEach(el => {
+      const header = el.previousElementSibling;
+      if (header) {
+        collapsedFolders.push(header.querySelector('span').textContent.split(' (')[0]);
+      }
+    });
+    
     const result = await chrome.storage.local.get(['privateBookmarks']);
     const filtered = (result.privateBookmarks || []).filter(b => b.id !== id);
     await chrome.storage.local.set({ privateBookmarks: filtered });
-    loadBookmarks();
+    await loadBookmarks();
+    
+    collapsedFolders.forEach(folderName => {
+      const headers = document.querySelectorAll('.folder-header');
+      headers.forEach(header => {
+        if (header.querySelector('span').textContent.startsWith(folderName)) {
+          header.classList.add('collapsed');
+          const content = header.nextElementSibling;
+          if (content && content.classList.contains('folder-content')) {
+            content.classList.add('collapsed');
+          }
+        }
+      });
+    });
   }
 
   async function addBookmark(title, url, folder = 'Uncategorized', tags = []) {
@@ -585,6 +832,24 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   lockBtn.addEventListener('click', async () => { await chrome.storage.local.set({ sessionUnlocked: false }); showLockedView(); checkPasswordSetup(); });
+  
+  syncNowBtn.addEventListener('click', async () => {
+    syncNowBtn.disabled = true;
+    syncNowBtn.textContent = '...';
+    
+    const result = await performSync();
+    
+    if (result.success) {
+      showToast('Sync completed', 'success');
+      loadBookmarks();
+    } else {
+      showToast('Sync failed: ' + result.message, 'error');
+    }
+    
+    syncNowBtn.disabled = false;
+    syncNowBtn.textContent = t('syncNow') || 'Sync';
+  });
+  
   addBookmarkBtn.addEventListener('click', handleAddBookmark);
   
   addFolderBtn.addEventListener('click', () => {
@@ -808,6 +1073,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   loadSettings();
+  
+  chrome.storage.local.get(['syncSettings'], (result) => {
+    const syncSettings = result.syncSettings || {};
+    if (syncSettings.syncEnabled && syncSettings.autoSync && syncSettings.syncInterval) {
+      startAutoSync(syncSettings.syncInterval);
+    }
+  });
+  
   initPendingData();
   checkUnlockStatus();
 });
