@@ -76,6 +76,7 @@ function applyTranslations(lang) {
 
 document.addEventListener('DOMContentLoaded', async () => {
   const lang = detectLanguage();
+  await loadTranslations(lang);
   applyTranslations(lang);
 
   const lockedView = document.getElementById('lockedView');
