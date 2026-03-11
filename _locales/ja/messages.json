@@ -274,5 +274,29 @@
   "languageTab": {
     "message": "言語",
     "description": "Language tab"
+  },
+  "importChromeBookmarks": {
+    "message": "Chromeブックマークからインポート",
+    "description": "Import button text"
+  },
+  "selectBookmarksToImport": {
+    "message": "インポートするブックマークを選択：",
+    "description": "Import modal description"
+  },
+  "selectAll": {
+    "message": "すべて選択",
+    "description": "Select all checkbox"
+  },
+  "importSelected": {
+    "message": "選択をインポート",
+    "description": "Import button"
+  },
+  "resetImportState": {
+    "message": "インポート状態をリセット",
+    "description": "Reset import state button"
+  },
+  "resetImportStateDesc": {
+    "message": "Chromeブックマークから再インポートを可能にする",
+    "description": "Reset import state description"
   }
 }

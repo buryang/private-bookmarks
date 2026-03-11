@@ -274,5 +274,29 @@
   "languageTab": {
     "message": "语言",
     "description": "Language tab"
+  },
+  "importChromeBookmarks": {
+    "message": "从Chrome书签导入",
+    "description": "Import button text"
+  },
+  "selectBookmarksToImport": {
+    "message": "选择要导入的书签：",
+    "description": "Import modal description"
+  },
+  "selectAll": {
+    "message": "全选",
+    "description": "Select all checkbox"
+  },
+  "importSelected": {
+    "message": "导入选中项",
+    "description": "Import button"
+  },
+  "resetImportState": {
+    "message": "重置导入状态",
+    "description": "Reset import state button"
+  },
+  "resetImportStateDesc": {
+    "message": "允许再次从Chrome书签导入",
+    "description": "Reset import state description"
   }
 }

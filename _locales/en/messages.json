@@ -274,5 +274,29 @@
   "languageTab": {
     "message": "Language",
     "description": "Language tab"
+  },
+  "importChromeBookmarks": {
+    "message": "Import from Chrome Bookmarks",
+    "description": "Import button text"
+  },
+  "selectBookmarksToImport": {
+    "message": "Select bookmarks to import:",
+    "description": "Import modal description"
+  },
+  "selectAll": {
+    "message": "Select All",
+    "description": "Select all checkbox"
+  },
+  "importSelected": {
+    "message": "Import Selected",
+    "description": "Import button"
+  },
+  "resetImportState": {
+    "message": "Reset Import State",
+    "description": "Reset import state button"
+  },
+  "resetImportStateDesc": {
+    "message": "Allow importing from Chrome bookmarks again",
+    "description": "Reset import state description"
   }
 }

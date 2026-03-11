@@ -122,6 +122,8 @@
     .folder-header:hover { background: #1f2a4a; }
     .folder-header svg { width: 14px; height: 14px; transition: transform 0.2s; }
     .folder-header.collapsed svg { transform: rotate(-90deg); }
+    .folder-content { display: block; }
+    .folder-content.collapsed { display: none; }
     .bookmark-item {
       display: flex;
       align-items: center;
@@ -304,6 +306,7 @@
         </div>
       </div>
       <div class="divider"></div>
+      <button class="btn btn-secondary" id="importChromeBookmarksBtn" style="margin-bottom: 12px; display: none;" data-i18n="importChromeBookmarks">Import from Chrome Bookmarks</button>
       <div class="add-bookmark-section">
         <h3 data-i18n="addBookmarkSection">Add Private Bookmark</h3>
         <div class="form-row">
@@ -497,6 +500,10 @@
               <option value="ja">日本語</option>
             </select>
           </div>
+          <div class="button-row">
+            <button class="btn btn-secondary btn-small" id="resetImportStateBtn" data-i18n="resetImportState">Reset Import State</button>
+          </div>
+          <p style="margin-top: 8px; font-size: 11px; color: #a0a0a0;" data-i18n="resetImportStateDesc">Allow importing from Chrome bookmarks again</p>
         </div>
       </div>
 
@@ -547,6 +554,22 @@
       <div class="modal-buttons">
         <button class="btn btn-secondary btn-small" id="cancelNewFolderBtn">Cancel</button>
         <button class="btn btn-primary btn-small" id="confirmNewFolderBtn">Create</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="importModal">
+    <div class="modal" style="max-height: 500px;">
+      <h2 data-i18n="importChromeBookmarks">Import from Chrome Bookmarks</h2>
+      <p style="font-size: 12px; color: #a0a0a0; margin-bottom: 12px;" data-i18n="selectBookmarksToImport">Select bookmarks to import:</p>
+      <div style="max-height: 280px; overflow-y: auto; margin-bottom: 12px;" id="chromeBookmarksList"></div>
+      <div class="checkbox-group-sm" style="margin-bottom: 12px;">
+        <input type="checkbox" id="selectAllBookmarks">
+        <label for="selectAllBookmarks" data-i18n="selectAll">Select All</label>
+      </div>
+      <div class="modal-buttons">
+        <button class="btn btn-secondary btn-small" id="cancelImportBtn" data-i18n="cancel">Cancel</button>
+        <button class="btn btn-primary btn-small" id="confirmImportBtn" data-i18n="importSelected">Import Selected</button>
       </div>
     </div>
   </div>

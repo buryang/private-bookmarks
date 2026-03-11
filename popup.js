@@ -41,6 +41,21 @@ async function decrypt(encrypted, key) {
   } catch { return null; }
 }
 
+let translations = {};
+
+async function loadTranslations(lang) {
+  try {
+    const response = await fetch(`_locales/${lang}/messages.json`);
+    translations = await response.json();
+  } catch (e) {
+    console.error('Failed to load translations:', e);
+  }
+}
+
+function t(key) {
+  return translations[key]?.message || key;
+}
+
 function detectLanguage() {
   const lang = chrome.i18n.getUILanguage();
   if (lang.startsWith('zh')) return 'zh_CN';
@@ -51,11 +66,11 @@ function detectLanguage() {
 function applyTranslations(lang) {
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
-    el.textContent = chrome.i18n.getMessage(key) || el.textContent;
+    el.textContent = t(key) || el.textContent;
   });
   document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
     const key = el.getAttribute('data-i18n-placeholder');
-    el.placeholder = chrome.i18n.getMessage(key) || el.placeholder;
+    el.placeholder = t(key) || el.placeholder;
   });
 }
 
@@ -102,6 +117,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   const newFolderName = document.getElementById('newFolderName');
   const cancelNewFolderBtn = document.getElementById('cancelNewFolderBtn');
   const confirmNewFolderBtn = document.getElementById('confirmNewFolderBtn');
+  const importChromeBookmarksBtn = document.getElementById('importChromeBookmarksBtn');
+  const importModal = document.getElementById('importModal');
+  const chromeBookmarksList = document.getElementById('chromeBookmarksList');
+  const cancelImportBtn = document.getElementById('cancelImportBtn');
+  const confirmImportBtn = document.getElementById('confirmImportBtn');
+  const selectAllBookmarks = document.getElementById('selectAllBookmarks');
+  const resetImportStateBtn = document.getElementById('resetImportStateBtn');
 
   const tabBtns = document.querySelectorAll('.tab-btn');
   const tabContents = document.querySelectorAll('.tab-content');
@@ -254,7 +276,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     await chrome.storage.local.set({ llmSettings: settings, syncSettings: settings, language: settings.language });
     
-    if (settings.language !== lang) applyTranslations(settings.language);
+    if (settings.language !== lang) {
+      showToast(chrome.i18n.getMessage('settingsSaved'), 'success');
+      settingsModal.classList.remove('active');
+      location.reload();
+      return;
+    }
     
     showToast(chrome.i18n.getMessage('settingsSaved'), 'success');
     settingsModal.classList.remove('active');
@@ -274,11 +301,17 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   async function checkUnlockStatus() {
     await updateFolderDropdown();
-    const result = await chrome.storage.local.get(['sessionUnlocked']);
+    const result = await chrome.storage.local.get(['sessionUnlocked', 'hasImportedFromChrome']);
     if (result.sessionUnlocked) { 
       isUnlocked = true; 
       showUnlockedView(); 
       loadBookmarks(); 
+      
+      if (!result.hasImportedFromChrome) {
+        importChromeBookmarksBtn.style.display = 'block';
+      } else {
+        importChromeBookmarksBtn.style.display = 'none';
+      }
     }
     else { checkPasswordSetup(); }
   }
@@ -320,7 +353,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const result = await chrome.storage.local.get(['privateBookmarks']);
     const bookmarks = result.privateBookmarks || [];
     
-    bookmarkList.querySelectorAll('.bookmark-item, .folder-header').forEach(el => el.remove());
+    bookmarkList.querySelectorAll('.bookmark-item, .folder-header, .folder-content').forEach(el => el.remove());
 
     if (bookmarks.length === 0) { emptyState.style.display = 'block'; }
     else {
@@ -332,7 +365,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         const folderHeader = document.createElement('div');
         folderHeader.className = 'folder-header';
         folderHeader.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg><span>${escapeHtml(folder)} (${folders[folder].length})</span>`;
-        folderHeader.addEventListener('click', () => folderHeader.classList.toggle('collapsed'));
+        
+        const folderContent = document.createElement('div');
+        folderContent.className = 'folder-content';
+        
+        folderHeader.addEventListener('click', () => {
+          folderHeader.classList.toggle('collapsed');
+          folderContent.classList.toggle('collapsed');
+        });
+        
         bookmarkList.insertBefore(folderHeader, emptyState);
 
         folders[folder].sort((a, b) => b.createdAt - a.createdAt).forEach(bookmark => {
@@ -343,8 +384,10 @@ document.addEventListener('DOMContentLoaded', async () => {
           item.innerHTML = `${faviconUrl ? `<img class="favicon" src="${faviconUrl}" onerror="this.style.display='none'">` : ''}<div class="bookmark-info"><div class="bookmark-title">${escapeHtml(bookmark.title)}</div><div class="bookmark-url">${escapeHtml(truncateUrl(bookmark.url))}</div>${tagsHtml}</div><button class="delete-btn" data-id="${bookmark.id}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>`;
           item.addEventListener('click', (e) => { if (!e.target.closest('.delete-btn')) chrome.tabs.create({ url: bookmark.url }); });
           item.querySelector('.delete-btn').addEventListener('click', async (e) => { e.stopPropagation(); await deleteBookmark(bookmark.id); });
-          bookmarkList.insertBefore(item, emptyState);
+          folderContent.appendChild(item);
         });
+        
+        bookmarkList.insertBefore(folderContent, emptyState);
       });
     }
     updateFolderDropdown();
@@ -570,7 +613,107 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
   
   newFolderModal.addEventListener('click', (e) => { if (e.target === newFolderModal) newFolderModal.classList.remove('active'); });
+
+  let chromeBookmarksData = [];
+
+  async function loadChromeBookmarks() {
+    return new Promise((resolve) => {
+      chrome.bookmarks.getTree((tree) => {
+        const bookmarks = [];
+        function traverse(node) {
+          if (node.children) {
+            node.children.forEach(child => traverse(child));
+          } else if (node.url) {
+            bookmarks.push({
+              title: node.title,
+              url: node.url,
+              folder: node.parentId || 'Chrome Bookmarks'
+            });
+          }
+        }
+        tree.forEach(node => traverse(node));
+        resolve(bookmarks);
+      });
+    });
+  }
+
+  async function showImportModal() {
+    importModal.classList.add('active');
+    chromeBookmarksList.innerHTML = '<div class="classifying"><div class="spinner"></div><span>Loading Chrome bookmarks...</span></div>';
+    
+    chromeBookmarksData = await loadChromeBookmarks();
+    
+    if (chromeBookmarksData.length === 0) {
+      chromeBookmarksList.innerHTML = '<p style="text-align: center; color: #a0a0a0; padding: 20px;">No bookmarks found in Chrome</p>';
+      return;
+    }
+
+    chromeBookmarksList.innerHTML = '';
+    chromeBookmarksData.forEach((bookmark, index) => {
+      const faviconUrl = getFaviconUrl(bookmark.url);
+      const item = document.createElement('div');
+      item.className = 'bookmark-item';
+      item.style.marginLeft = '0';
+      item.innerHTML = `
+        <input type="checkbox" class="import-checkbox" data-index="${index}" checked>
+        ${faviconUrl ? `<img class="favicon" src="${faviconUrl}" onerror="this.style.display='none'">` : ''}
+        <div class="bookmark-info">
+          <div class="bookmark-title">${escapeHtml(bookmark.title)}</div>
+          <div class="bookmark-url">${escapeHtml(truncateUrl(bookmark.url))}</div>
+        </div>
+      `;
+      chromeBookmarksList.appendChild(item);
+    });
+  }
+
+  async function importSelectedBookmarks() {
+    const checkboxes = chromeBookmarksList.querySelectorAll('.import-checkbox:checked');
+    const selectedBookmarks = Array.from(checkboxes).map(cb => chromeBookmarksData[cb.dataset.index]);
+    
+    if (selectedBookmarks.length === 0) {
+      showToast('No bookmarks selected', 'error');
+      return;
+    }
+
+    const result = await chrome.storage.local.get(['privateBookmarks']);
+    const bookmarks = result.privateBookmarks || [];
+    
+    let importedCount = 0;
+    for (const bm of selectedBookmarks) {
+      bookmarks.push({
+        id: generateId(),
+        title: bm.title || 'Untitled',
+        url: bm.url || 'about:blank',
+        folder: 'Imported',
+        tags: [],
+        createdAt: Date.now(),
+        modifiedAt: Date.now()
+      });
+      importedCount++;
+    }
+
+    await chrome.storage.local.set({ privateBookmarks: bookmarks, hasImportedFromChrome: true });
+    importModal.classList.remove('active');
+    loadBookmarks();
+    showToast(`Imported ${importedCount} bookmarks`, 'success');
+  }
+
+  importChromeBookmarksBtn.addEventListener('click', showImportModal);
+  cancelImportBtn.addEventListener('click', () => importModal.classList.remove('active'));
+  importModal.addEventListener('click', (e) => { if (e.target === importModal) importModal.classList.remove('active'); });
+  confirmImportBtn.addEventListener('click', importSelectedBookmarks);
   
+  selectAllBookmarks.addEventListener('change', () => {
+    const checkboxes = chromeBookmarksList.querySelectorAll('.import-checkbox');
+    checkboxes.forEach(cb => cb.checked = selectAllBookmarks.checked);
+  });
+
+  resetImportStateBtn.addEventListener('click', async () => {
+    await chrome.storage.local.set({ hasImportedFromChrome: false });
+    importChromeBookmarksBtn.style.display = 'block';
+    showToast('Import state reset. You can import again.', 'success');
+  });
+
   settingsBtn.addEventListener('click', async () => { await loadSettings(); settingsModal.classList.add('active'); });
   cancelSettingsBtn.addEventListener('click', () => settingsModal.classList.remove('active'));
   saveSettingsBtn.addEventListener('click', saveSettings);
