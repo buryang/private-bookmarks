@@ -495,6 +495,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       editTags.value = result.tags.join(', ');
     } else {
       await addBookmark(title, url, folder);
+      window.close();
     }
   }
 
@@ -505,6 +506,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       await addBookmark(pendingBookmark.title, pendingBookmark.url, folder, tags);
       pendingBookmark = null;
       classificationModal.classList.remove('active');
+      window.close();
     }
   });
 
@@ -513,6 +515,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       await addBookmark(pendingBookmark.title, pendingBookmark.url);
       pendingBookmark = null;
       classificationModal.classList.remove('active');
+      window.close();
     }
   });
 
