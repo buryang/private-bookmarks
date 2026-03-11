@@ -34,7 +34,7 @@ Keep your sensitive bookmarks away from prying eyes — hidden from the main boo
 ## Development Setup
 
 ```bash
-git clone https://github.com/[你的用户名]/private-bookmarks.git
+git clone https://github.com/buryang/private-bookmarks.git
 cd private-bookmarks
 npm install
 npm run dev    # watch mode for development
