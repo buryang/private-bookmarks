@@ -1,0 +1,278 @@
+{
+  "extensionName": {
+    "message": "プライベートブックマーク",
+    "description": "Extension name"
+  },
+  "extensionDesc": {
+    "message": "AI分類とクラウド同期機能を備えたパスワード保護プライベートブックマーク",
+    "description": "Extension description"
+  },
+  "shortcutDesc": {
+    "message": "プライベートブックマークを開く",
+    "description": "Keyboard shortcut description"
+  },
+  "unlockTitle": {
+    "message": "パスワードを入力してプライベートブックマークにアクセス",
+    "description": "Unlock screen title"
+  },
+  "createPassword": {
+    "message": "ブックマークを保護するパスワードを作成",
+    "description": "Create password prompt"
+  },
+  "unlockBtn": {
+    "message": "ロック解除",
+    "description": "Unlock button"
+  },
+  "setPasswordBtn": {
+    "message": "パスワード設定",
+    "description": "Set password button"
+  },
+  "passwordPlaceholder": {
+    "message": "パスワードを入力",
+    "description": "Password input placeholder"
+  },
+  "incorrectPassword": {
+    "message": "パスワードが正しくありません",
+    "description": "Error message for wrong password"
+  },
+  "pleaseEnterPassword": {
+    "message": "パスワードを入力してください",
+    "description": "Error message for empty password"
+  },
+  "unlocked": {
+    "message": "ロック解除済み",
+    "description": "Unlocked status"
+  },
+  "lockBtn": {
+    "message": "ロック",
+    "description": "Lock button"
+  },
+  "noBookmarks": {
+    "message": "プライベートブックマークはまだありません",
+    "description": "Empty state message"
+  },
+  "addBookmarkSection": {
+    "message": "プライベートブックマークを追加",
+    "description": "Add bookmark section title"
+  },
+  "titlePlaceholder": {
+    "message": "ブックマークのタイトル",
+    "description": "Title input placeholder"
+  },
+  "urlPlaceholder": {
+    "message": "https://example.com",
+    "description": "URL input placeholder"
+  },
+  "enableAIClassify": {
+    "message": "AI分類を有効にする",
+    "description": "AI classification checkbox"
+  },
+  "addBtn": {
+    "message": "ブックマークを追加",
+    "description": "Add bookmark button"
+  },
+  "settings": {
+    "message": "設定",
+    "description": "Settings button"
+  },
+  "llmSettings": {
+    "message": "LLM設定",
+    "description": "LLM settings title"
+  },
+  "apiEndpoint": {
+    "message": "APIエンドポイント",
+    "description": "API endpoint label"
+  },
+  "apiKey": {
+    "message": "APIキー",
+    "description": "API key label"
+  },
+  "model": {
+    "message": "モデル",
+    "description": "Model label"
+  },
+  "enableAI": {
+    "message": "AI分類を有効にする",
+    "description": "Enable AI checkbox"
+  },
+  "cancel": {
+    "message": "キャンセル",
+    "description": "Cancel button"
+  },
+  "save": {
+    "message": "保存",
+    "description": "Save button"
+  },
+  "settingsSaved": {
+    "message": "設定を保存しました",
+    "description": "Settings saved toast"
+  },
+  "aiClassification": {
+    "message": "AI分類",
+    "description": "AI classification modal title"
+  },
+  "analyzing": {
+    "message": "ブックマークを分析中...",
+    "description": "Analyzing message"
+  },
+  "suggestedFolder": {
+    "message": "推奨フォルダ：",
+    "description": "Suggested folder label"
+  },
+  "suggestedTags": {
+    "message": "推奨タグ：",
+    "description": "Suggested tags label"
+  },
+  "folderLabel": {
+    "message": "フォルダ（編集可能）",
+    "description": "Folder input label"
+  },
+  "tagsLabel": {
+    "message": "タグ（カンマ区切り、編集可能）",
+    "description": "Tags input label"
+  },
+  "skip": {
+    "message": "スキップ",
+    "description": "Skip button"
+  },
+  "confirm": {
+    "message": "確認",
+    "description": "Confirm button"
+  },
+  "syncSettings": {
+    "message": "クラウド同期設定",
+    "description": "Sync settings title"
+  },
+  "syncMethod": {
+    "message": "同期方法",
+    "description": "Sync method label"
+  },
+  "methodNone": {
+    "message": "ローカルのみ",
+    "description": "No sync option"
+  },
+  "methodWebdav": {
+    "message": "WebDAV",
+    "description": "WebDAV sync option"
+  },
+  "methodSupabase": {
+    "message": "Supabase",
+    "description": "Supabase sync option"
+  },
+  "methodGist": {
+    "message": "GitHub Gist",
+    "description": "Gist sync option"
+  },
+  "serverUrl": {
+    "message": "サーバーURL",
+    "description": "Server URL label"
+  },
+  "username": {
+    "message": "ユーザー名",
+    "description": "Username label"
+  },
+  "password": {
+    "message": "パスワード",
+    "description": "Password label"
+  },
+  "remotePath": {
+    "message": "リモートパス",
+    "description": "Remote path label"
+  },
+  "supabaseUrl": {
+    "message": "Supabase URL",
+    "description": "Supabase URL label"
+  },
+  "supabaseAnonKey": {
+    "message": "Anonキー",
+    "description": "Supabase anon key label"
+  },
+  "gistToken": {
+    "message": "GitHubトークン",
+    "description": "Gist token label"
+  },
+  "gistId": {
+    "message": "Gist ID（任意）",
+    "description": "Gist ID label"
+  },
+  "autoSync": {
+    "message": "自動同期",
+    "description": "Auto sync checkbox"
+  },
+  "interval": {
+    "message": "同期間隔（分）",
+    "description": "Sync interval label"
+  },
+  "syncNow": {
+    "message": "今すぐ同期",
+    "description": "Sync now button"
+  },
+  "lastSync": {
+    "message": "最終同期：",
+    "description": "Last sync label"
+  },
+  "never": {
+    "message": "未同期",
+    "description": "Never synced"
+  },
+  "syncSuccess": {
+    "message": "同期完了",
+    "description": "Sync success message"
+  },
+  "syncError": {
+    "message": "同期失敗",
+    "description": "Sync error message"
+  },
+  "folderPlaceholder": {
+    "message": "例：仕事、技術ニュース",
+    "description": "Folder input placeholder"
+  },
+  "tagsPlaceholder": {
+    "message": "例：重要、チュートリアル",
+    "description": "Tags input placeholder"
+  },
+  "urlLabel": {
+    "message": "URL",
+    "description": "URL label (read-only)"
+  },
+  "makePrivate": {
+    "message": "プライベートに設定",
+    "description": "Make private button"
+  },
+  "keepPublic": {
+    "message": "公開のまま",
+    "description": "Keep public button"
+  },
+  "newBookmarkAdded": {
+    "message": "新しいブックマークが追加されました",
+    "description": "Notification title"
+  },
+  "makeItPrivate": {
+    "message": "プライベートに設定しますか？",
+    "description": "Notification message"
+  },
+  "encryptionKey": {
+    "message": "暗号化キー",
+    "description": "Encryption key label"
+  },
+  "encryptionKeyDesc": {
+    "message": "同期認証情報を暗号化するためのキー",
+    "description": "Encryption key description"
+  },
+  "language": {
+    "message": "言語",
+    "description": "Language setting label"
+  },
+  "passwordTab": {
+    "message": "パスワード",
+    "description": "Password tab"
+  },
+  "syncTab": {
+    "message": "同期",
+    "description": "Sync tab"
+  },
+  "languageTab": {
+    "message": "言語",
+    "description": "Language tab"
+  }
+}

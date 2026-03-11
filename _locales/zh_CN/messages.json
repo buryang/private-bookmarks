@@ -1,0 +1,278 @@
+{
+  "extensionName": {
+    "message": "私密书签",
+    "description": "Extension name"
+  },
+  "extensionDesc": {
+    "message": "密码保护的私密书签，支持AI分类和云同步",
+    "description": "Extension description"
+  },
+  "shortcutDesc": {
+    "message": "打开私密书签",
+    "description": "Keyboard shortcut description"
+  },
+  "unlockTitle": {
+    "message": "输入密码以访问私密书签",
+    "description": "Unlock screen title"
+  },
+  "createPassword": {
+    "message": "创建密码以保护您的书签",
+    "description": "Create password prompt"
+  },
+  "unlockBtn": {
+    "message": "解锁",
+    "description": "Unlock button"
+  },
+  "setPasswordBtn": {
+    "message": "设置密码",
+    "description": "Set password button"
+  },
+  "passwordPlaceholder": {
+    "message": "输入密码",
+    "description": "Password input placeholder"
+  },
+  "incorrectPassword": {
+    "message": "密码错误",
+    "description": "Error message for wrong password"
+  },
+  "pleaseEnterPassword": {
+    "message": "请输入密码",
+    "description": "Error message for empty password"
+  },
+  "unlocked": {
+    "message": "已解锁",
+    "description": "Unlocked status"
+  },
+  "lockBtn": {
+    "message": "锁定",
+    "description": "Lock button"
+  },
+  "noBookmarks": {
+    "message": "暂无私密书签",
+    "description": "Empty state message"
+  },
+  "addBookmarkSection": {
+    "message": "添加私密书签",
+    "description": "Add bookmark section title"
+  },
+  "titlePlaceholder": {
+    "message": "书签标题",
+    "description": "Title input placeholder"
+  },
+  "urlPlaceholder": {
+    "message": "https://example.com",
+    "description": "URL input placeholder"
+  },
+  "enableAIClassify": {
+    "message": "启用AI分类",
+    "description": "AI classification checkbox"
+  },
+  "addBtn": {
+    "message": "添加书签",
+    "description": "Add bookmark button"
+  },
+  "settings": {
+    "message": "设置",
+    "description": "Settings button"
+  },
+  "llmSettings": {
+    "message": "LLM 设置",
+    "description": "LLM settings title"
+  },
+  "apiEndpoint": {
+    "message": "API 端点",
+    "description": "API endpoint label"
+  },
+  "apiKey": {
+    "message": "API 密钥",
+    "description": "API key label"
+  },
+  "model": {
+    "message": "模型",
+    "description": "Model label"
+  },
+  "enableAI": {
+    "message": "启用AI分类",
+    "description": "Enable AI checkbox"
+  },
+  "cancel": {
+    "message": "取消",
+    "description": "Cancel button"
+  },
+  "save": {
+    "message": "保存",
+    "description": "Save button"
+  },
+  "settingsSaved": {
+    "message": "设置已保存",
+    "description": "Settings saved toast"
+  },
+  "aiClassification": {
+    "message": "AI 分类",
+    "description": "AI classification modal title"
+  },
+  "analyzing": {
+    "message": "正在分析书签...",
+    "description": "Analyzing message"
+  },
+  "suggestedFolder": {
+    "message": "建议文件夹：",
+    "description": "Suggested folder label"
+  },
+  "suggestedTags": {
+    "message": "建议标签：",
+    "description": "Suggested tags label"
+  },
+  "folderLabel": {
+    "message": "文件夹（可编辑）",
+    "description": "Folder input label"
+  },
+  "tagsLabel": {
+    "message": "标签（逗号分隔，可编辑）",
+    "description": "Tags input label"
+  },
+  "skip": {
+    "message": "跳过",
+    "description": "Skip button"
+  },
+  "confirm": {
+    "message": "确认",
+    "description": "Confirm button"
+  },
+  "syncSettings": {
+    "message": "云同步设置",
+    "description": "Sync settings title"
+  },
+  "syncMethod": {
+    "message": "同步方式",
+    "description": "Sync method label"
+  },
+  "methodNone": {
+    "message": "仅本地存储",
+    "description": "No sync option"
+  },
+  "methodWebdav": {
+    "message": "WebDAV",
+    "description": "WebDAV sync option"
+  },
+  "methodSupabase": {
+    "message": "Supabase",
+    "description": "Supabase sync option"
+  },
+  "methodGist": {
+    "message": "GitHub Gist",
+    "description": "Gist sync option"
+  },
+  "serverUrl": {
+    "message": "服务器地址",
+    "description": "Server URL label"
+  },
+  "username": {
+    "message": "用户名",
+    "description": "Username label"
+  },
+  "password": {
+    "message": "密码",
+    "description": "Password label"
+  },
+  "remotePath": {
+    "message": "远程路径",
+    "description": "Remote path label"
+  },
+  "supabaseUrl": {
+    "message": "Supabase 地址",
+    "description": "Supabase URL label"
+  },
+  "supabaseAnonKey": {
+    "message": "Anon Key",
+    "description": "Supabase anon key label"
+  },
+  "gistToken": {
+    "message": "GitHub Token",
+    "description": "Gist token label"
+  },
+  "gistId": {
+    "message": "Gist ID（可选）",
+    "description": "Gist ID label"
+  },
+  "autoSync": {
+    "message": "自动同步",
+    "description": "Auto sync checkbox"
+  },
+  "interval": {
+    "message": "同步间隔（分钟）",
+    "description": "Sync interval label"
+  },
+  "syncNow": {
+    "message": "立即同步",
+    "description": "Sync now button"
+  },
+  "lastSync": {
+    "message": "上次同步：",
+    "description": "Last sync label"
+  },
+  "never": {
+    "message": "从未同步",
+    "description": "Never synced"
+  },
+  "syncSuccess": {
+    "message": "同步完成",
+    "description": "Sync success message"
+  },
+  "syncError": {
+    "message": "同步失败",
+    "description": "Sync error message"
+  },
+  "folderPlaceholder": {
+    "message": "例如：工作、技术、新闻",
+    "description": "Folder input placeholder"
+  },
+  "tagsPlaceholder": {
+    "message": "例如：重要、教程",
+    "description": "Tags input placeholder"
+  },
+  "urlLabel": {
+    "message": "网址",
+    "description": "URL label (read-only)"
+  },
+  "makePrivate": {
+    "message": "设为私密",
+    "description": "Make private button"
+  },
+  "keepPublic": {
+    "message": "保持公开",
+    "description": "Keep public button"
+  },
+  "newBookmarkAdded": {
+    "message": "新书签已添加",
+    "description": "Notification title"
+  },
+  "makeItPrivate": {
+    "message": "是否设为私密书签？",
+    "description": "Notification message"
+  },
+  "encryptionKey": {
+    "message": "加密密钥",
+    "description": "Encryption key label"
+  },
+  "encryptionKeyDesc": {
+    "message": "用于加密同步凭证的密钥",
+    "description": "Encryption key description"
+  },
+  "language": {
+    "message": "语言",
+    "description": "Language setting label"
+  },
+  "passwordTab": {
+    "message": "密码",
+    "description": "Password tab"
+  },
+  "syncTab": {
+    "message": "同步",
+    "description": "Sync tab"
+  },
+  "languageTab": {
+    "message": "语言",
+    "description": "Language tab"
+  }
+}

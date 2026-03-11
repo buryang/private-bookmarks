@@ -1,0 +1,278 @@
+{
+  "extensionName": {
+    "message": "Private Bookmarks",
+    "description": "Extension name"
+  },
+  "extensionDesc": {
+    "message": "Password-protected private bookmarks with AI categorization and cloud sync",
+    "description": "Extension description"
+  },
+  "shortcutDesc": {
+    "message": "Open private bookmarks",
+    "description": "Keyboard shortcut description"
+  },
+  "unlockTitle": {
+    "message": "Enter your password to access private bookmarks",
+    "description": "Unlock screen title"
+  },
+  "createPassword": {
+    "message": "Create a password to protect your bookmarks",
+    "description": "Create password prompt"
+  },
+  "unlockBtn": {
+    "message": "Unlock",
+    "description": "Unlock button"
+  },
+  "setPasswordBtn": {
+    "message": "Set Password",
+    "description": "Set password button"
+  },
+  "passwordPlaceholder": {
+    "message": "Enter password",
+    "description": "Password input placeholder"
+  },
+  "incorrectPassword": {
+    "message": "Incorrect password",
+    "description": "Error message for wrong password"
+  },
+  "pleaseEnterPassword": {
+    "message": "Please enter a password",
+    "description": "Error message for empty password"
+  },
+  "unlocked": {
+    "message": "Unlocked",
+    "description": "Unlocked status"
+  },
+  "lockBtn": {
+    "message": "Lock",
+    "description": "Lock button"
+  },
+  "noBookmarks": {
+    "message": "No private bookmarks yet",
+    "description": "Empty state message"
+  },
+  "addBookmarkSection": {
+    "message": "Add Private Bookmark",
+    "description": "Add bookmark section title"
+  },
+  "titlePlaceholder": {
+    "message": "Bookmark title",
+    "description": "Title input placeholder"
+  },
+  "urlPlaceholder": {
+    "message": "https://example.com",
+    "description": "URL input placeholder"
+  },
+  "enableAIClassify": {
+    "message": "Enable AI classification",
+    "description": "AI classification checkbox"
+  },
+  "addBtn": {
+    "message": "Add Bookmark",
+    "description": "Add bookmark button"
+  },
+  "settings": {
+    "message": "Settings",
+    "description": "Settings button"
+  },
+  "llmSettings": {
+    "message": "LLM Settings",
+    "description": "LLM settings title"
+  },
+  "apiEndpoint": {
+    "message": "API Endpoint",
+    "description": "API endpoint label"
+  },
+  "apiKey": {
+    "message": "API Key",
+    "description": "API key label"
+  },
+  "model": {
+    "message": "Model",
+    "description": "Model label"
+  },
+  "enableAI": {
+    "message": "Enable AI classification",
+    "description": "Enable AI checkbox"
+  },
+  "cancel": {
+    "message": "Cancel",
+    "description": "Cancel button"
+  },
+  "save": {
+    "message": "Save",
+    "description": "Save button"
+  },
+  "settingsSaved": {
+    "message": "Settings saved",
+    "description": "Settings saved toast"
+  },
+  "aiClassification": {
+    "message": "AI Classification",
+    "description": "AI classification modal title"
+  },
+  "analyzing": {
+    "message": "Analyzing bookmark...",
+    "description": "Analyzing message"
+  },
+  "suggestedFolder": {
+    "message": "Suggested folder:",
+    "description": "Suggested folder label"
+  },
+  "suggestedTags": {
+    "message": "Suggested tags:",
+    "description": "Suggested tags label"
+  },
+  "folderLabel": {
+    "message": "Folder (editable)",
+    "description": "Folder input label"
+  },
+  "tagsLabel": {
+    "message": "Tags (comma-separated, editable)",
+    "description": "Tags input label"
+  },
+  "skip": {
+    "message": "Skip",
+    "description": "Skip button"
+  },
+  "confirm": {
+    "message": "Confirm",
+    "description": "Confirm button"
+  },
+  "syncSettings": {
+    "message": "Cloud Sync Settings",
+    "description": "Sync settings title"
+  },
+  "syncMethod": {
+    "message": "Sync Method",
+    "description": "Sync method label"
+  },
+  "methodNone": {
+    "message": "None (Local only)",
+    "description": "No sync option"
+  },
+  "methodWebdav": {
+    "message": "WebDAV",
+    "description": "WebDAV sync option"
+  },
+  "methodSupabase": {
+    "message": "Supabase",
+    "description": "Supabase sync option"
+  },
+  "methodGist": {
+    "message": "GitHub Gist",
+    "description": "Gist sync option"
+  },
+  "serverUrl": {
+    "message": "Server URL",
+    "description": "Server URL label"
+  },
+  "username": {
+    "message": "Username",
+    "description": "Username label"
+  },
+  "password": {
+    "message": "Password",
+    "description": "Password label"
+  },
+  "remotePath": {
+    "message": "Remote Path",
+    "description": "Remote path label"
+  },
+  "supabaseUrl": {
+    "message": "Supabase URL",
+    "description": "Supabase URL label"
+  },
+  "supabaseAnonKey": {
+    "message": "Anon Key",
+    "description": "Supabase anon key label"
+  },
+  "gistToken": {
+    "message": "GitHub Token",
+    "description": "Gist token label"
+  },
+  "gistId": {
+    "message": "Gist ID (optional)",
+    "description": "Gist ID label"
+  },
+  "autoSync": {
+    "message": "Auto-sync",
+    "description": "Auto sync checkbox"
+  },
+  "interval": {
+    "message": "Interval (minutes)",
+    "description": "Sync interval label"
+  },
+  "syncNow": {
+    "message": "Sync Now",
+    "description": "Sync now button"
+  },
+  "lastSync": {
+    "message": "Last sync:",
+    "description": "Last sync label"
+  },
+  "never": {
+    "message": "Never",
+    "description": "Never synced"
+  },
+  "syncSuccess": {
+    "message": "Sync completed",
+    "description": "Sync success message"
+  },
+  "syncError": {
+    "message": "Sync failed",
+    "description": "Sync error message"
+  },
+  "folderPlaceholder": {
+    "message": "e.g., Work, Tech, News",
+    "description": "Folder input placeholder"
+  },
+  "tagsPlaceholder": {
+    "message": "e.g., important, tutorial",
+    "description": "Tags input placeholder"
+  },
+  "urlLabel": {
+    "message": "URL",
+    "description": "URL label (read-only)"
+  },
+  "makePrivate": {
+    "message": "Make Private",
+    "description": "Make private button"
+  },
+  "keepPublic": {
+    "message": "Keep Public",
+    "description": "Keep public button"
+  },
+  "newBookmarkAdded": {
+    "message": "New Bookmark Added",
+    "description": "Notification title"
+  },
+  "makeItPrivate": {
+    "message": "Make it private?",
+    "description": "Notification message"
+  },
+  "encryptionKey": {
+    "message": "Encryption Key",
+    "description": "Encryption key label"
+  },
+  "encryptionKeyDesc": {
+    "message": "Key used to encrypt sync credentials",
+    "description": "Encryption key description"
+  },
+  "language": {
+    "message": "Language",
+    "description": "Language setting label"
+  },
+  "passwordTab": {
+    "message": "Password",
+    "description": "Password tab"
+  },
+  "syncTab": {
+    "message": "Sync",
+    "description": "Sync tab"
+  },
+  "languageTab": {
+    "message": "Language",
+    "description": "Language tab"
+  }
+}
